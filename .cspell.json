@@ -1,0 +1,22 @@
+{
+  "dictionaries": ["css", "html", "node", "npm", "typescript"],
+  "import": ["@cspell/dict-ru_ru/cspell-ext.json"],
+  "useGitignore": true,
+  "language": "en,ru",
+  "ignorePaths": [
+    ".github",
+    "license.md",
+    "pnpm-lock.yaml",
+    "styles",
+    "tsconfig.json"
+  ],
+  "ignoreWords": [
+    "avia",
+    "azat",
+    "shiki",
+    "sonarjs",
+    "lightningcss",
+    "nanostores",
+    "onetwotrip"
+  ]
+}

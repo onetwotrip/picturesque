@@ -1,0 +1,16 @@
+[build]
+  included_files = ["node_modules/**/*"]
+  command = "pnpm run build:client"
+  node_bundler = "esbuild"
+  functions = "functions"
+  publish = "dist"
+
+[dev]
+  command = "pnpm run start:client"
+  targetPort = 3000
+  publish = "dist"
+  port = 8888
+
+[functions]
+  external_node_modules = ["sharp"]
+  included_files = ["node_modules/sharp/**/*"]

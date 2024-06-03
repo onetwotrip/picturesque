@@ -1,0 +1,4 @@
+{
+  "*.{ts,js,svelte}": "eslint",
+  "*.{css,svelte}": "stylelint"
+}

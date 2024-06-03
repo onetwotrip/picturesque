@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Application",
+    "path": ["dist/index.html", "dist/assets/index-*"],
+    "limit": "100 kB",
+    "brotli": true
+  }
+]

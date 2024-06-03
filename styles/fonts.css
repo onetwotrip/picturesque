@@ -1,0 +1,38 @@
+@font-face {
+  font-family: Stem;
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/stem-regular.woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Stem;
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/stem-bold.woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Stem Fallback';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Arial');
+  size-adjust: 105.81%;
+  ascent-override: 93.94%;
+  descent-override: 27.97%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Monaspace Neon';
+  src: url('/fonts/monaspace-neon.woff2');
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F;
+}
+
+:root {
+  --font-base: 'Stem', 'Stem Fallback', sans-serif;
+  --font-code: 'Monaspace Neon', monospace;
+}
