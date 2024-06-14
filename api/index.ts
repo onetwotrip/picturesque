@@ -19,9 +19,13 @@ export interface Response {
   }
 }
 
-export let picturesque = async (image: File): Promise<Response> => {
+export let picturesque = async (
+  image: File,
+  quality: number,
+): Promise<Response> => {
   let formData = new FormData()
   formData.append('image', image)
+  formData.append('quality', quality.toString())
   let response = await fetch('/.netlify/functions/picturesque', {
     body: formData,
     method: 'POST',

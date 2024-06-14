@@ -56,6 +56,8 @@ export let gradientDirections = [
   },
 ]
 
+export let qualities = [65, 70, 75, 80, 85, 90, 95, 100] as const
+
 export let vertical = atom(sample(verticals).value)
 export let gradientDirection =
   atom<(typeof gradientDirections)[number]['value']>('to right')
@@ -77,20 +79,34 @@ export let gradients = atom<{
 } | null>(null)
 export let image = atom<File | null>(null)
 export let useImportant = atom(true)
+export let quality = atom(80)
+
+let getData = async (imageValue: File, qualityValue: number) => {
+  loading.set(true)
+  let response = await picturesque(imageValue, qualityValue)
+  gradients.set(response.gradients)
+  imageData.set(response.images)
+  sizes.set(response.sizes)
+  loading.set(false)
+  firstLoad.set(false)
+}
 
 onSet(image, ({ newValue, abort }) => {
   if (newValue) {
     task(async () => {
-      loading.set(true)
-      let response = await picturesque(newValue)
-      gradients.set(response.gradients)
-      imageData.set(response.images)
-      sizes.set(response.sizes)
-      loading.set(false)
-      firstLoad.set(false)
+      await getData(newValue, quality.get())
     })
   } else {
     abort()
+  }
+})
+
+onSet(quality, ({ newValue }) => {
+  let imageValue = image.get()
+  if (imageValue) {
+    task(async () => {
+      await getData(imageValue, newValue)
+    })
   }
 })
 

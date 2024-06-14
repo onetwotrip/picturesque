@@ -15,7 +15,8 @@
   --color-content-primary: oklch(90% 0.015 108);
   --color-content-secondary: oklch(80% 0.015 108);
   --color-content-inverse: oklch(18% 0.015 108);
-  --color-content-success: oklch(88.13% 0.176 141.17);
+  --color-content-success: oklch(88.13% 0.176 140);
+  --color-content-error: oklch(88.13% 0.176 10);
 
   --color-border-brand: oklch(88.13% 0.176 93.53);
   --color-border-primary: oklch(24% 0.015 108);

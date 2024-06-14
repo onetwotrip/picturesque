@@ -16,19 +16,27 @@
 </script>
 
 {#if $sizes && !$loading}
-  <p class="status">
+  <p
+    class:success={$sizes.original > $sizes.desktop}
+    class:error={$sizes.original < $sizes.desktop}
+    class="status"
+  >
     <b>Десктоп:</b>
-    {convertBytes($sizes.original)} kB → {convertBytes($sizes.desktop)} kB ({calculatePercent(
-      $sizes.original,
-      $sizes.desktop,
-    ) * -1}%)
+    {convertBytes($sizes.original)}
+    kB → {convertBytes($sizes.desktop)} kB ({$sizes.original < $sizes.desktop
+      ? '+'
+      : ''}{calculatePercent($sizes.original, $sizes.desktop) * -1}%)
   </p>
-  <p class="status">
+  <p
+    class:success={$sizes.original > $sizes.mobile}
+    class:error={$sizes.original < $sizes.mobile}
+    class="status"
+  >
     <b>Мобила:</b>
-    {convertBytes($sizes.original)} kB → {convertBytes($sizes.mobile)} kB ({calculatePercent(
-      $sizes.original,
-      $sizes.mobile,
-    ) * -1}%)
+    {convertBytes($sizes.original)}
+    kB → {convertBytes($sizes.mobile)} kB ({$sizes.original < $sizes.mobile
+      ? '+'
+      : ''}{calculatePercent($sizes.original, $sizes.mobile) * -1}%)
   </p>
 {/if}
 
@@ -37,9 +45,16 @@
     display: flex;
     gap: var(--space-2xs);
     align-items: center;
-    color: var(--color-content-success);
     opacity: 0%;
     animation: fade-in 500ms forwards;
+  }
+
+  .success {
+    color: var(--color-content-success);
+  }
+
+  .error {
+    color: var(--color-content-error);
   }
 
   @keyframes fade-in {

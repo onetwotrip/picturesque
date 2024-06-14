@@ -10,11 +10,14 @@ interface Image {
   type: string
 }
 
-let parseMultipartForm = (
-  event: HandlerEvent,
-): Promise<Record<string, Image[]> | null> =>
-  new Promise(resolve => {
-    let fields: Record<string, Image[]> = { image: [] }
+interface Fields {
+  [key: string]: Image[] | string
+  image: Image[]
+}
+
+let parseMultipartForm = (event: HandlerEvent): Promise<Fields | null> =>
+  new Promise((resolve, reject) => {
+    let fields: Fields = { image: [] }
     let bb = busboy({ headers: event.headers })
 
     bb.on('file', (name, file, info) => {
@@ -26,16 +29,27 @@ let parseMultipartForm = (
       })
 
       file.on('end', () => {
-        fields[name].push({
-          content: Buffer.concat(chunks),
-          type: mimeType,
-          filename,
-        })
+        let fieldValue = fields[name]
+        if (typeof fieldValue !== 'string') {
+          fieldValue.push({
+            content: Buffer.concat(chunks),
+            type: mimeType,
+            filename,
+          })
+        }
       })
+    })
+
+    bb.on('field', (name, value) => {
+      fields[name] = value
     })
 
     bb.on('close', () => {
       resolve(fields)
+    })
+
+    bb.on('error', err => {
+      reject(err)
     })
 
     bb.end(Buffer.from(event.body!, 'base64'))
@@ -44,17 +58,19 @@ let parseMultipartForm = (
 let rgbaToHex = ({ r, g, b }: { r: number; g: number; b: number }): string =>
   `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
 
-let generateImages = async (buffer: Buffer) => {
+let generateImages = async (buffer: Buffer, quality: number) => {
+  let metadata = await sharp(buffer).metadata()
+  let { height, width } = metadata
   let sizes = [
-    { suffix: 'desktop', width: null },
+    {
+      width: typeof width === 'number' && width > 1600 ? 1600 : null,
+      suffix: 'desktop',
+    },
     { suffix: 'tablet', width: 1200 },
     { suffix: 'mobile', width: 768 },
   ] as const
 
-  let formats = [{ format: 'webp', quality: 75 }] as const
-
-  let metadata = await sharp(buffer).metadata()
-  let { height } = metadata
+  let formats = [{ format: 'webp', quality }] as const
 
   let imagePromises = []
 
@@ -188,6 +204,7 @@ export let handler: Handler = async (
 
     let [image] = fields.image
     let buffer = image.content
+    let quality = parseInt(fields.quality as string, 10)
 
     /**
      * Generate a gradient from the image's center points
@@ -197,7 +214,7 @@ export let handler: Handler = async (
     /**
      * Generate WebP
      */
-    let images = await generateImages(buffer)
+    let images = await generateImages(buffer, quality)
 
     /**
      * Get the sizes of the images
