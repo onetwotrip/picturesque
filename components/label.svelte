@@ -8,6 +8,11 @@
 
 <style>
   .label {
+    min-inline-size: 140px;
     white-space: nowrap;
+
+    @container (inline-size >= 600px) {
+      min-inline-size: auto;
+    }
   }
 </style>

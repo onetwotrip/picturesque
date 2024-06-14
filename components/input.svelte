@@ -23,7 +23,7 @@
 
 <style>
   .input {
-    inline-size: 180px;
+    inline-size: 100%;
     padding: var(--space-2xs) var(--space-xs);
     color: var(--color-content-primary);
     background: var(--color-background-tertiary);

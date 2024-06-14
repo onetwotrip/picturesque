@@ -32,10 +32,11 @@
 <style>
   .wrapper {
     position: relative;
+    inline-size: 100%;
   }
 
   .select {
-    min-inline-size: 180px;
+    inline-size: 100%;
     padding: var(--space-2xs) var(--space-xs);
     color: var(--color-content-secondary);
     appearance: none;
