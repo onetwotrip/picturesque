@@ -12,7 +12,7 @@
     white-space: nowrap;
 
     @container (inline-size >= 600px) {
-      min-inline-size: auto;
+      min-inline-size: 130px;
     }
   }
 </style>

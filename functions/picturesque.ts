@@ -119,6 +119,56 @@ let getSizes = async (
   }
 }
 
+interface Gradients {
+  'to right bottom': string
+  'to right top': string
+  'to bottom': string
+  'to right': string
+}
+
+const getGradients = async (buffer: Buffer): Promise<Gradients> => {
+  let img = await Jimp.read(buffer)
+  let { height, width } = img.bitmap
+
+  let points = {
+    'to right bottom': [
+      { y: height / 4, x: width / 4 },
+      { y: height / 2, x: width / 2 },
+      { y: (3 * height) / 4, x: (3 * width) / 4 },
+    ],
+    'to right top': [
+      { y: (3 * height) / 4, x: width / 4 },
+      { y: height / 2, x: width / 2 },
+      { x: (3 * width) / 4, y: height / 4 },
+    ],
+    'to bottom': [
+      { y: height / 2, x: width / 4 },
+      { y: height / 2, x: width / 2 },
+      { x: (3 * width) / 4, y: height / 2 },
+    ],
+    'to right': [
+      { y: height / 4, x: width / 4 },
+      { y: height / 4, x: width / 2 },
+      { x: (3 * width) / 4, y: height / 4 },
+    ],
+  }
+
+  let gradients: Record<keyof Gradients, string> = {} as Record<
+    keyof Gradients,
+    string
+  >
+
+  for (let direction in points) {
+    let colors = points[direction as keyof typeof points].map(point =>
+      rgbaToHex(Jimp.intToRGBA(img.getPixelColor(point.x, point.y))),
+    ) as [string, string, string]
+    gradients[direction as keyof Gradients] =
+      `linear-gradient(${direction}, ${colors.join(', ')})`
+  }
+
+  return gradients
+}
+
 export let handler: Handler = async (
   event: HandlerEvent,
 ): Promise<HandlerResponse> => {
@@ -142,19 +192,7 @@ export let handler: Handler = async (
     /**
      * Generate a gradient from the image's center points
      */
-    let img = await Jimp.read(buffer)
-    let { height, width } = img.bitmap
-    let points = [
-      { y: height / 2, x: width / 4 },
-      { y: height / 2, x: width / 2 },
-      { x: (3 * width) / 4, y: height / 2 },
-    ]
-
-    let colors = points.map(point =>
-      Jimp.intToRGBA(img.getPixelColor(point.x, point.y)),
-    )
-
-    let gradient = `linear-gradient(to right, ${colors.map(color => rgbaToHex(color)).join(', ')})`
+    let gradients = await getGradients(buffer)
 
     /**
      * Generate WebP
@@ -168,7 +206,7 @@ export let handler: Handler = async (
 
     return {
       body: JSON.stringify({
-        gradient,
+        gradients,
         images,
         sizes,
       }),

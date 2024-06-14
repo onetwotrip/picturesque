@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { gradient } from '~/stores/form-data'
+  import { gradientDirection, gradients } from '~/stores/form-data'
 </script>
 
-<div style="background: {$gradient}" class="gradient"></div>
+<div
+  style="background: {$gradients?.[$gradientDirection]}"
+  class="gradient"
+></div>
 
 <style>
   .gradient {

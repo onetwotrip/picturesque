@@ -1,10 +1,11 @@
 import { computed, atom } from 'nanostores'
 
 import {
+  gradientDirection,
   useImportant,
   partnerName,
+  gradients,
   vertical,
-  gradient,
 } from '~/stores/form-data'
 
 let formatGradientString = (gradientValue: string): string => {
@@ -23,11 +24,17 @@ export let firstLoad = atom(true)
 export let loading = atom(true)
 
 export let code = computed(
-  [partnerName, vertical, useImportant, gradient],
-  (partnerNameValue, verticalValue, useImportantValue, gradientValue) => {
+  [partnerName, vertical, useImportant, gradients, gradientDirection],
+  (
+    partnerNameValue,
+    verticalValue,
+    useImportantValue,
+    gradientsValue,
+    gradientDirectionValue,
+  ) => {
     let important = useImportantValue ? ' !important' : ''
     return `[data-wl-status="${verticalValue}_index"] .App__content:before {
-  background-color: ${gradientValue ? formatGradientString(gradientValue) : '#212121'}${important};
+  background-color: ${gradientsValue ? formatGradientString(gradientsValue[gradientDirectionValue]) : '#212121'}${important};
   background-image: url("https://static.onetwotrip.com/images/partners/${partnerNameValue}/background-${verticalValue}-mobile.webp")${important};
   background-repeat: no-repeat${important};
   background-position: center top${important};

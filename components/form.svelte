@@ -1,5 +1,7 @@
 <script lang="ts">
   import {
+    gradientDirections,
+    gradientDirection,
     useImportant,
     partnerName,
     verticals,
@@ -11,8 +13,6 @@
   import Select from '~/components/select.svelte'
   import Input from '~/components/input.svelte'
   import Label from '~/components/label.svelte'
-
-  import Hr from './hr.svelte'
 </script>
 
 <form class="form">
@@ -21,21 +21,27 @@
       <Label htmlFor="name">Имя партнёра</Label>
       <Input onChange={value => partnerName.set(value)} value={$partnerName} />
     </div>
-    <Hr />
     <div class="form-group">
-      <Label htmlFor="name">Продукт</Label>
+      <Label htmlFor="name">Тип продукта</Label>
       <Select
         onChange={value => vertical.set(value)}
         options={verticals}
         value={$vertical}
       />
     </div>
-    <Hr />
     <div class="form-group">
       <Label htmlFor="name">Использовать <code>!important</code></Label>
       <Checkbox
         onChange={value => useImportant.set(value)}
         value={$useImportant}
+      />
+    </div>
+    <div class="form-group">
+      <Label htmlFor="name">Градиент</Label>
+      <Select
+        onChange={value => gradientDirection.set(value)}
+        options={gradientDirections}
+        value={$gradientDirection}
       />
     </div>
   </div>
@@ -71,16 +77,16 @@
   .form-data {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-m);
+    gap: var(--space-m) var(--space-xl);
     align-items: center;
     margin-block-start: var(--space-xs);
 
     @container (inline-size >= 600px) {
-      grid-template-columns: 1fr auto 1fr auto;
+      grid-template-columns: repeat(2, 1fr);
     }
 
     @container (inline-size >= 980px) {
-      grid-template-columns: 1fr auto 1fr auto 1fr;
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 

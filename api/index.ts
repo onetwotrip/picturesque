@@ -1,4 +1,10 @@
 export interface Response {
+  gradients: {
+    'to right bottom': string
+    'to right top': string
+    'to bottom': string
+    'to right': string
+  }
   images: {
     webp: {
       desktop: string
@@ -11,7 +17,6 @@ export interface Response {
     desktop: number
     mobile: number
   }
-  gradient: string
 }
 
 export let picturesque = async (image: File): Promise<Response> => {
