@@ -19,6 +19,7 @@
       "~/styles/*": ["./styles/*"],
       "~/assets/*": ["./assets/*"],
       "~/stores/*": ["./stores/*"],
+      "~/themes/*": ["./themes/*"],
       "~/api": ["./api/index.ts"],
       "~/icons/*": ["./icons/*"],
       "~/utils/*": ["./utils/*"]
