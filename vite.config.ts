@@ -1,9 +1,13 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { browserslistToTargets } from 'lightningcss'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import { fileURLToPath } from 'node:url'
 import browserslist from 'browserslist'
 import { defineConfig } from 'vite'
+import path from 'node:path'
 import os from 'node:os'
+
+let dirname = fileURLToPath(path.dirname(import.meta.url))
 
 export default defineConfig({
   plugins: [
@@ -28,14 +32,18 @@ export default defineConfig({
     svelte(),
   ],
   css: {
+    lightningcss: {
+      targets: browserslistToTargets(
+        browserslist(null, {
+          config: path.join(dirname, '.browserslistrc'),
+        }),
+      ),
+    },
     modules: {
       generateScopedName:
         process.env.NODE_ENV === 'development'
           ? '[local]--[hash:base64:4]'
           : '[hash:base64:4]',
-    },
-    lightningcss: {
-      targets: browserslistToTargets(browserslist('>= 0.25%')),
     },
     transformer: 'lightningcss',
   },
