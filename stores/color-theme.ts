@@ -3,7 +3,7 @@ import { onSet } from 'nanostores'
 
 type Theme = 'light' | 'dark'
 
-export let colorTheme = persistentAtom<Theme>('color-theme', 'light')
+export let colorTheme = persistentAtom<Theme>('color-theme', 'dark')
 
 export let toggleColorTheme = () => {
   colorTheme.set(colorTheme.get() === 'light' ? 'dark' : 'light')
