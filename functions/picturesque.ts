@@ -63,7 +63,7 @@ let generateImages = async (buffer: Buffer, quality: number) => {
   let { height, width } = metadata
   let sizes = [
     {
-      width: typeof width === 'number' && width > 1600 ? 1600 : null,
+      width: typeof width === 'number' && width > 2600 ? 2600 : null,
       suffix: 'desktop',
     },
     { suffix: 'tablet', width: 1200 },
