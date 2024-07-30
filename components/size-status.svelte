@@ -1,6 +1,5 @@
 <script lang="ts">
   import { loading, code } from '~/stores/code'
-  // eslint-disable-next-line perfectionist/sort-imports
   import { sizes } from '~/stores/form-data'
 
   // eslint-disable-next-line no-unused-expressions
