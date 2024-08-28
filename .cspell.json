@@ -18,6 +18,7 @@
     "sonarjs",
     "lightningcss",
     "nanostores",
-    "onetwotrip"
+    "onetwotrip",
+    "sveltejs"
   ]
 }
