@@ -1,7 +1,7 @@
 import type { HighlighterCore, ThemeInput } from 'shiki'
 
+import { createJavaScriptRegexEngine, getSingletonHighlighter } from 'shiki'
 import { computed, onMount, atom, task } from 'nanostores'
-import { getHighlighter } from 'shiki'
 
 import { colorTheme } from '~/stores/color-theme'
 import ayuLight from '~/themes/ayu-light.json'
@@ -10,6 +10,8 @@ import ayuDark from '~/themes/ayu-dark.json'
 let shikiHighlighter = atom<HighlighterCore | null>(null)
 let lightTheme = 'ayu-light'
 let darkTheme = 'ayu-dark'
+
+let jsEngine = createJavaScriptRegexEngine()
 
 export let shiki = computed(
   [shikiHighlighter, colorTheme],
@@ -21,8 +23,9 @@ export let shiki = computed(
 
 onMount(shikiHighlighter, () => {
   task(async () => {
-    let highlighter = await getHighlighter({
+    let highlighter = await getSingletonHighlighter({
       langs: [import('shiki/langs/scss.mjs')],
+      engine: jsEngine,
       themes: [],
     })
 
