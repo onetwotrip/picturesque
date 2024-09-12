@@ -1,8 +1,8 @@
 import type { HandlerResponse, HandlerEvent, Handler } from '@netlify/functions'
 
+import { intToRGBA, Jimp } from 'jimp'
 import busboy from 'busboy'
 import sharp from 'sharp'
-import Jimp from 'jimp'
 
 interface Image {
   filename: string
@@ -176,7 +176,7 @@ const getGradients = async (buffer: Buffer): Promise<Gradients> => {
 
   for (let direction in points) {
     let colors = points[direction as keyof typeof points].map(point =>
-      rgbaToHex(Jimp.intToRGBA(img.getPixelColor(point.x, point.y))),
+      rgbaToHex(intToRGBA(img.getPixelColor(point.x, point.y))),
     ) as [string, string, string]
     gradients[direction as keyof Gradients] =
       `linear-gradient(${direction}, ${colors.join(', ')})`
