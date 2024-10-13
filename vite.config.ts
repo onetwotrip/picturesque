@@ -1,13 +1,10 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { browserslistToTargets } from 'lightningcss'
 import { createHtmlPlugin } from 'vite-plugin-html'
-import { fileURLToPath } from 'node:url'
 import browserslist from 'browserslist'
 import { defineConfig } from 'vite'
 import path from 'node:path'
 import os from 'node:os'
-
-let dirname = fileURLToPath(path.dirname(import.meta.url))
 
 export default defineConfig({
   plugins: [
@@ -35,7 +32,7 @@ export default defineConfig({
     lightningcss: {
       targets: browserslistToTargets(
         browserslist(null, {
-          config: path.join(dirname, '.browserslistrc'),
+          config: path.join(import.meta.dirname, '.browserslistrc'),
         }),
       ),
     },
