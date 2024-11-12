@@ -11,31 +11,35 @@
   }
 
   let calculatePercent = (original: number, current: number): number =>
-    parseFloat((100 - (current * 100) / original).toFixed(2))
+    Number.parseFloat((100 - (current * 100) / original).toFixed(2))
+
+  $: originalSize = $sizes?.original ?? Number.NaN
+  $: desktopSize = $sizes?.desktop ?? Number.NaN
+  $: mobileSize = $sizes?.mobile ?? Number.NaN
 </script>
 
 {#if $sizes && !$loading}
   <p
-    class:success={$sizes.original > $sizes.desktop}
-    class:error={$sizes.original < $sizes.desktop}
+    class:success={originalSize > desktopSize}
+    class:error={originalSize < desktopSize}
     class="status"
   >
     <b>Десктоп:</b>
-    {convertBytes($sizes.original)}
-    kB → {convertBytes($sizes.desktop)} kB ({$sizes.original < $sizes.desktop
+    {convertBytes(originalSize)}
+    kB → {convertBytes(desktopSize)} kB ({originalSize < desktopSize
       ? '+'
-      : ''}{calculatePercent($sizes.original, $sizes.desktop) * -1}%)
+      : ''}{calculatePercent(originalSize, desktopSize) * -1}%)
   </p>
   <p
-    class:success={$sizes.original > $sizes.mobile}
-    class:error={$sizes.original < $sizes.mobile}
+    class:success={originalSize > mobileSize}
+    class:error={originalSize < mobileSize}
     class="status"
   >
     <b>Мобила:</b>
-    {convertBytes($sizes.original)}
-    kB → {convertBytes($sizes.mobile)} kB ({$sizes.original < $sizes.mobile
+    {convertBytes(originalSize)}
+    kB → {convertBytes(mobileSize)} kB ({originalSize < mobileSize
       ? '+'
-      : ''}{calculatePercent($sizes.original, $sizes.mobile) * -1}%)
+      : ''}{calculatePercent(originalSize, mobileSize) * -1}%)
   </p>
 {/if}
 

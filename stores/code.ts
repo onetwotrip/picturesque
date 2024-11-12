@@ -9,12 +9,14 @@ import {
 } from '~/stores/form-data'
 
 let formatGradientString = (gradientValue: string): string => {
-  let parts = gradientValue.match(/(linear-gradient\()(.*)(\))/)
+  let parts = gradientValue.match(/(?:linear-gradient\()(?<content>.*?)(?:\))/u)
+
   if (!parts) {
     throw new Error('Invalid gradient string')
   }
 
-  let directionAndColors = parts[2].split(',').map(part => part.trim())
+  let directionAndColors =
+    parts.groups?.content.split(',').map(part => part.trim()) ?? []
   let formattedDirectionAndColors = directionAndColors.join(',\n    ')
 
   return `${parts[1]}\n    ${formattedDirectionAndColors}\n  ${parts[3]}`
@@ -31,7 +33,7 @@ export let code = computed(
     useImportantValue,
     gradientsValue,
     gradientDirectionValue,
-  ) => {
+  ): string => {
     let important = useImportantValue ? ' !important' : ''
     return `[data-wl-status="${verticalValue}_index"] .App__content:before {
   background-color: ${gradientsValue ? formatGradientString(gradientsValue[gradientDirectionValue]) : '#212121'}${important};

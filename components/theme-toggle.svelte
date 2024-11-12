@@ -2,7 +2,7 @@
   import { toggleColorTheme, colorTheme } from '~/stores/color-theme'
 </script>
 
-<button on:click={toggleColorTheme} class="theme-toggle">
+<button on:click={toggleColorTheme} class="theme-toggle" type="button">
   {#if $colorTheme === 'dark'}
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
       <path

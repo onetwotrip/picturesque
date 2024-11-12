@@ -2,8 +2,8 @@
   import Button from '~/components/button.svelte'
   import { loading, code } from '~/stores/code'
 
-  let copyCode = () => {
-    navigator.clipboard.writeText($code)
+  let copyCode = async (): Promise<void> => {
+    await navigator.clipboard.writeText($code)
   }
 </script>
 

@@ -1,2 +1,2 @@
-export let sample = <T extends unknown>(array: T[]): T =>
+export let sample = <T>(array: T[]): T =>
   array[Math.floor(Math.random() * array.length)]

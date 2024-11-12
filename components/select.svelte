@@ -11,7 +11,7 @@
     }}
     class="select"
   >
-    {#each options as { value: optionValue, name }}
+    {#each options as { value: optionValue, name } (optionValue)}
       <option selected={optionValue === value} value={optionValue}>
         {name}
       </option>

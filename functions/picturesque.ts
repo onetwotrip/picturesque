@@ -24,7 +24,7 @@ let parseMultipartForm = (event: HandlerEvent): Promise<Fields | null> =>
       let { filename, mimeType } = info
       let chunks: Buffer[] = []
 
-      file.on('data', data => {
+      file.on('data', (data: Buffer) => {
         chunks.push(data)
       })
 
@@ -48,8 +48,8 @@ let parseMultipartForm = (event: HandlerEvent): Promise<Fields | null> =>
       resolve(fields)
     })
 
-    bb.on('error', err => {
-      reject(err)
+    bb.on('error', _error => {
+      reject(new Error('Unable to parse form data'))
     })
 
     bb.end(Buffer.from(event.body!, 'base64'))
@@ -58,7 +58,12 @@ let parseMultipartForm = (event: HandlerEvent): Promise<Fields | null> =>
 let rgbaToHex = ({ r, g, b }: { r: number; g: number; b: number }): string =>
   `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
 
-let generateImages = async (buffer: Buffer, quality: number) => {
+let generateImages = async (
+  buffer: Buffer,
+  quality: number,
+): Promise<
+  Record<'webp', Record<'desktop' | 'tablet' | 'mobile', string | null>>
+> => {
   let metadata = await sharp(buffer).metadata()
   let { height, width } = metadata
   let sizes = [
@@ -101,14 +106,19 @@ let generateImages = async (buffer: Buffer, quality: number) => {
 
   type Images = Record<
     (typeof formats)[number]['format'],
-    {
-      [key in (typeof sizes)[number]['suffix']]: string
-    }
+    Record<(typeof sizes)[number]['suffix'], string | null>
   >
 
-  let images: Images = formats.reduce(
-    (accumulator, { format }) => ({ ...accumulator, [format]: {} }) as Images,
-    {} as Images,
+  let images: Images = formats.reduce<Images>(
+    (accumulator: Images, { format }) =>
+      ({ ...accumulator, [format]: {} }) as Images,
+    {
+      webp: {
+        desktop: null,
+        tablet: null,
+        mobile: null,
+      },
+    },
   )
 
   for (let result of results) {
@@ -124,13 +134,21 @@ let generateImages = async (buffer: Buffer, quality: number) => {
 
 let getSizes = async (
   buffer: Buffer,
-  images: { desktop: string; mobile: string },
-) => {
+  images: { desktop: string | null; mobile: string | null },
+): Promise<{
+  original?: number
+  desktop: number
+  mobile: number
+}> => {
   let originalMetadata = await sharp(buffer).metadata()
-  let clean = (image: string) => Buffer.from(image, 'base64')
+  let clean = (image: string): Buffer => Buffer.from(image, 'base64')
   return {
-    desktop: clean(images.desktop).length,
-    mobile: clean(images.mobile).length,
+    desktop: images.desktop
+      ? clean(images.desktop).length
+      : originalMetadata.size!,
+    mobile: images.mobile
+      ? clean(images.mobile).length
+      : originalMetadata.size!,
     original: originalMetadata.size,
   }
 }
@@ -142,7 +160,7 @@ interface Gradients {
   'to right': string
 }
 
-const getGradients = async (buffer: Buffer): Promise<Gradients> => {
+let getGradients = async (buffer: Buffer): Promise<Gradients> => {
   let img = await Jimp.read(buffer)
   let { height, width } = img.bitmap
 
@@ -175,11 +193,13 @@ const getGradients = async (buffer: Buffer): Promise<Gradients> => {
   >
 
   for (let direction in points) {
-    let colors = points[direction as keyof typeof points].map(point =>
-      rgbaToHex(intToRGBA(img.getPixelColor(point.x, point.y))),
-    ) as [string, string, string]
-    gradients[direction as keyof Gradients] =
-      `linear-gradient(${direction}, ${colors.join(', ')})`
+    if (direction) {
+      let colors = points[direction as keyof typeof points].map(point =>
+        rgbaToHex(intToRGBA(img.getPixelColor(point.x, point.y))),
+      ) as [string, string, string]
+      gradients[direction as keyof Gradients] =
+        `linear-gradient(${direction}, ${colors.join(', ')})`
+    }
   }
 
   return gradients
@@ -204,7 +224,7 @@ export let handler: Handler = async (
 
     let [image] = fields.image
     let buffer = image.content
-    let quality = parseInt(fields.quality as string, 10)
+    let quality = Number.parseInt(fields.quality as string, 10)
 
     /**
      * Generate a gradient from the image's center points

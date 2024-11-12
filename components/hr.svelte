@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <hr class="hr" />
 
 <style>

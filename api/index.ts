@@ -30,5 +30,5 @@ export let picturesque = async (
     body: formData,
     method: 'POST',
   })
-  return await response.json()
+  return (await response.json()) as Response
 }

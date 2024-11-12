@@ -4,7 +4,7 @@
 
   let timer: ReturnType<typeof setTimeout>
 
-  let debounce = (newValue: string) => {
+  let debounce = (newValue: string): void => {
     clearTimeout(timer)
     timer = setTimeout(() => {
       onChange(newValue)

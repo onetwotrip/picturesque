@@ -3,13 +3,13 @@
 
   import { image } from '~/stores/form-data'
 
-  $: imageUrl = writable<string | null>(null)
+  let imageUrl = writable<string | null>(null)
 
   $: if ($image) {
     let reader = new FileReader()
     reader.readAsDataURL($image)
     reader.onloadend = () => {
-      $imageUrl = reader.result as string
+      imageUrl.set(reader.result as string)
     }
   }
 </script>

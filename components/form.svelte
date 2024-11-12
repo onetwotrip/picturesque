@@ -21,12 +21,15 @@
   <div class="form-data">
     <div class="form-group">
       <Label htmlFor="name">Имя партнёра</Label>
-      <Input onChange={value => partnerName.set(value)} value={$partnerName} />
+      <Input
+        onChange={(value: string) => partnerName.set(value)}
+        value={$partnerName}
+      />
     </div>
     <div class="form-group">
       <Label htmlFor="name">Тип продукта</Label>
       <Select
-        onChange={value => vertical.set(value)}
+        onChange={(value: string) => vertical.set(value)}
         options={verticals}
         value={$vertical}
       />
@@ -34,14 +37,14 @@
     <div class="form-group">
       <Label htmlFor="name">Использовать <code>!important</code></Label>
       <Checkbox
-        onChange={value => useImportant.set(value)}
+        onChange={(value: boolean) => useImportant.set(value)}
         value={$useImportant}
       />
     </div>
     <div class="form-group">
       <Label htmlFor="name">Градиент</Label>
       <Select
-        onChange={value => gradientDirection.set(value)}
+        onChange={(value: string) => gradientDirection.set(value)}
         options={gradientDirections}
         value={$gradientDirection}
       />
@@ -49,13 +52,16 @@
     <div class="form-group">
       <Label htmlFor="name">Качество</Label>
       <Select
-        options={qualities.map(q => ({ value: q.toString(), name: `${q}%` }))}
-        onChange={value => quality.set(parseInt(value))}
-        value={$quality.toString()}
+        options={qualities.map(qualityValue => ({
+          value: qualityValue.toString(),
+          name: `${qualityValue}%`,
+        }))}
+        onChange={(value: string) => quality.set(Number.parseInt(value))}
+        value={`${$quality}`}
       />
     </div>
     <div>
-      <FileUpload onChange={value => image.set(value)}>
+      <FileUpload onChange={(value: File) => image.set(value)}>
         Загрузить картинку
         <svg
           xmlns="http://www.w3.org/2000/svg"

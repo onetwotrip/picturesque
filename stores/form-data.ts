@@ -74,14 +74,15 @@ export let partnerName = atom(
 )
 export let imageData = atom<Response['images'] | null>(null)
 export let sizes = atom<Response['sizes'] | null>(null)
-export let gradients = atom<{
-  [key: (typeof gradientDirections)[number]['value']]: string
-} | null>(null)
+export let gradients = atom<Record<
+  (typeof gradientDirections)[number]['value'],
+  string
+> | null>(null)
 export let image = atom<File | null>(null)
 export let useImportant = atom(true)
 export let quality = atom(80)
 
-let getData = async (imageValue: File, qualityValue: number) => {
+let getData = async (imageValue: File, qualityValue: number): Promise<void> => {
   loading.set(true)
   let response = await picturesque(imageValue, qualityValue)
   gradients.set(response.gradients)

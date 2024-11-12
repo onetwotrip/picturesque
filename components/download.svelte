@@ -4,14 +4,14 @@
   import Button from '~/components/button.svelte'
   import { loading, zip } from '~/stores/zip'
 
-  $: download = () => {
+  let download = (): void => {
     if ($zip && $partnerName) {
       let url = URL.createObjectURL($zip)
 
       let a = document.createElement('a')
       a.href = url
       a.download = `${$partnerName}.zip`
-      document.body.appendChild(a)
+      document.body.append(a)
       a.click()
       a.remove()
       URL.revokeObjectURL(url)

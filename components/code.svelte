@@ -5,20 +5,22 @@
   import { firstLoad, loading, code } from '~/stores/code'
   import Loader from '~/components/loader.svelte'
   import { shiki } from '~/stores/shiki'
+
+  $: ({ highlighter, theme } = $shiki)
 </script>
 
 <div class:loading={$loading && !$firstLoad} class="wrapper">
-  {#if !$firstLoad && $shiki.highlighter}
+  {#if !$firstLoad && highlighter}
     <ShikiMagicMove
       options={{
         animateContainer: false,
         duration: 500,
         stagger: 3,
       }}
-      highlighter={$shiki.highlighter}
-      theme={$shiki.theme}
+      {highlighter}
       code={$code}
       lang="scss"
+      {theme}
     />
   {:else}
     <div class="loader-container">

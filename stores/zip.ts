@@ -14,13 +14,13 @@ export let zip = computed(
         let jszip = new JSZip()
         let folder = jszip.folder(partnerNameValue)
         let sizes = ['desktop', 'tablet', 'mobile'] as const
-        sizes.forEach(size => {
+        for (let size of sizes) {
           folder?.file(
             `background-${verticalValue}-${size}.webp`,
             imageDataValue.webp[size],
             { base64: true },
           )
-        })
+        }
         let content = await jszip.generateAsync({ type: 'blob' })
         loading.set(false)
 
