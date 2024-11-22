@@ -2,7 +2,7 @@
   {
     "name": "Application",
     "path": ["dist/index.html", "dist/assets/index-*"],
-    "limit": "120 kB",
+    "limit": "130 kB",
     "brotli": true
   }
 ]

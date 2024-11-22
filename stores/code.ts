@@ -9,7 +9,7 @@ import {
 } from '~/stores/form-data'
 
 let formatGradientString = (gradientValue: string): string => {
-  let parts = gradientValue.match(/(?:linear-gradient\()(?<content>.*?)(?:\))/u)
+  let parts = gradientValue.match(/linear-gradient\((?<content>.*?)\)/u)
 
   if (!parts) {
     throw new Error('Invalid gradient string')
@@ -33,6 +33,7 @@ export let code = computed(
     useImportantValue,
     gradientsValue,
     gradientDirectionValue,
+    // eslint-disable-next-line @typescript-eslint/max-params
   ): string => {
     let important = useImportantValue ? ' !important' : ''
     return `[data-wl-status="${verticalValue}_index"] .App__content:before {

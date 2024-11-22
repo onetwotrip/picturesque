@@ -2,7 +2,7 @@
   import { loading, code } from '~/stores/code'
   import { sizes } from '~/stores/form-data'
 
-  // eslint-disable-next-line no-unused-expressions
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   $code
 
   let convertBytes = (bytes: number): string => {
