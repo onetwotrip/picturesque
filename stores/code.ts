@@ -9,17 +9,20 @@ import {
 } from '~/stores/form-data'
 
 let formatGradientString = (gradientValue: string): string => {
-  let parts = gradientValue.match(/linear-gradient\((?<content>.*?)\)/u)
+  let match = gradientValue.match(
+    /(?<prefix>linear-gradient\()(?<content>.*?)\)/u,
+  )
 
-  if (!parts) {
+  if (!match?.groups) {
     throw new Error('Invalid gradient string')
   }
 
-  let directionAndColors =
-    parts.groups?.content.split(',').map(part => part.trim()) ?? []
+  let { content, prefix } = match.groups
+  let directionAndColors = content.split(',').map(part => part.trim())
+
   let formattedDirectionAndColors = directionAndColors.join(',\n    ')
 
-  return `${parts[1]}\n    ${formattedDirectionAndColors}\n  ${parts[3]}`
+  return `${prefix}\n    ${formattedDirectionAndColors}\n  )`
 }
 
 export let firstLoad = atom(true)
