@@ -26,10 +26,10 @@
     inline-size: 100%;
     padding: var(--space-2xs) var(--space-xs);
     color: var(--color-content-primary);
+    outline: none;
     background: var(--color-background-tertiary);
     border: 1px solid var(--color-border-primary);
     border-radius: var(--border-radius);
-    outline: none;
     transition: border-color 200ms;
 
     &:hover {

@@ -36,7 +36,7 @@ export let code = computed(
     useImportantValue,
     gradientsValue,
     gradientDirectionValue,
-    // eslint-disable-next-line @typescript-eslint/max-params
+    // eslint-disable-next-line typescript/max-params
   ): string => {
     let important = useImportantValue ? ' !important' : ''
     return `[data-wl-status="${verticalValue}_index"] .App__content:before {

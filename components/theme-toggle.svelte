@@ -33,10 +33,10 @@
     display: flex;
     padding: 0;
     cursor: pointer;
+    outline: none;
     background: none;
     border: none;
     border-radius: var(--border-radius);
-    outline: none;
 
     &:focus-visible {
       box-shadow: 0 0 0 2px var(--color-content-brand);

@@ -37,10 +37,10 @@
     padding: var(--space-2xs) var(--space-xs);
     color: var(--color-content-inverse);
     cursor: pointer;
+    outline: none;
     background: var(--color-background-inverse);
     border: 1px solid var(--color-border-primary);
     border-radius: var(--border-radius);
-    outline: none;
     transition: all 200ms;
 
     &:hover,
